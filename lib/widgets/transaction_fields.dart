@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
-class TransactionFields extends StatelessWidget {
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
-
+class TransactionFields extends StatefulWidget {
   final Function addNewTx;
 
   TransactionFields(this.addNewTx);
+
+  @override
+  _TransactionFieldsState createState() => _TransactionFieldsState();
+}
+
+class _TransactionFieldsState extends State<TransactionFields> {
+  final titleController = TextEditingController();
+
+  final amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +35,7 @@ class TransactionFields extends StatelessWidget {
             FlatButton(
               textColor: Colors.blue,
               onPressed: () {
-                addNewTx(
+                widget.addNewTx(
                     titleController.text, double.parse(amountController.text));
               },
               child: Text("Add Transaction"),
