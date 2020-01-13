@@ -14,6 +14,12 @@ class _TransactionFieldsState extends State<TransactionFields> {
 
   final amountController = TextEditingController();
 
+
+  void _showDatePicker(){
+
+    showDatePicker(context: context, initialDate: DateTime.now(), firstDate: null, lastDate: null);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -32,11 +38,31 @@ class _TransactionFieldsState extends State<TransactionFields> {
               controller: amountController,
               decoration: InputDecoration(labelText: 'Amount'),
             ),
-            FlatButton(
-              textColor: Colors.blue,
+            Container(
+              height: 70,
+              child: Row(
+                children: <Widget>[
+                  Text("No Date Chosen"),
+                  FlatButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Choose Date",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            RaisedButton(
+              textColor: Colors.white,
+              color: Theme.of(context).primaryColor,
               onPressed: () {
                 widget.addNewTx(
-                    titleController.text, double.parse(amountController.text));
+                  titleController.text,
+                  double.parse(amountController.text),
+                );
               },
               child: Text("Add Transaction"),
             ),

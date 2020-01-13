@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_expense/model/transaction.dart';
+import 'package:personal_expense/widgets/chart.dart';
 import 'package:personal_expense/widgets/transaction_fields.dart';
 import 'package:personal_expense/widgets/transaction_list.dart';
 
@@ -26,11 +27,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    Transaction(
-        title: "New Shoes", id: "t1", amount: 69.99, date: DateTime.now()),
-    Transaction(
-        title: "New Socks", id: "t2", amount: 50.99, date: DateTime.now())
+//    Transaction(
+//        title: "New Shoes", id: "t1", amount: 69.99, date: DateTime.now()),
+//    Transaction(
+//        title: "New Socks", id: "t2", amount: 50.99, date: DateTime.now())
   ];
+
+  List<Transaction> get _recentTransaction {
+    return _transactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   _addNewTransactions(String title, double amount) {
     final newTx = Transaction(
@@ -51,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         context: ctx,
         builder: (c) {
           return GestureDetector(
-            onTap: (){},
+            onTap: () {},
             behavior: HitTestBehavior.opaque,
             child: TransactionFields(_addNewTransactions),
           );
@@ -81,14 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text("Char"),
-                elevation: 5,
-              ),
-            ),
+            Chart(_recentTransaction),
             TransactionList(_transactions),
           ],
         ),
