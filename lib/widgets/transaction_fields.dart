@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransactionFields extends StatefulWidget {
   final Function addNewTx;
@@ -11,13 +12,24 @@ class TransactionFields extends StatefulWidget {
 
 class _TransactionFieldsState extends State<TransactionFields> {
   final titleController = TextEditingController();
-
   final amountController = TextEditingController();
 
+  DateTime _selectedDate;
 
-  void _showDatePicker(){
-
-    showDatePicker(context: context, initialDate: DateTime.now(), firstDate: null, lastDate: null);
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    });
   }
 
   @override
@@ -41,10 +53,13 @@ class _TransactionFieldsState extends State<TransactionFields> {
             Container(
               height: 70,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text("No Date Chosen"),
+                  Text(_selectedDate == null
+                      ? "No Date Chosen"
+                      : DateFormat.yMMMd().format(_selectedDate)),
                   FlatButton(
-                    onPressed: () {},
+                    onPressed: _showDatePicker,
                     child: Text(
                       "Choose Date",
                       style: TextStyle(
@@ -62,6 +77,7 @@ class _TransactionFieldsState extends State<TransactionFields> {
                 widget.addNewTx(
                   titleController.text,
                   double.parse(amountController.text),
+                  _selectedDate,
                 );
               },
               child: Text("Add Transaction"),
